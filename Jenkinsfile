@@ -36,6 +36,28 @@ pipeline {
 				sh "mvn failsafe:integration-test failsafe:verify"
 			}
 		}
+		stage('Package') {
+			steps {
+				sh "mvn package -DskipTests"
+			}
+		}
+		stage('Docker build') {
+			steps {
+				script {
+					dockerImage = docker.build("sobankhalid101/currency-exchange-devops:${env.BUILD_TAG}")
+				}
+			}
+		}
+		stage('Docker push') {
+			steps {
+				script {
+					docker.withRegistry('', 'dockerhub') {
+						dockerImage.push();
+						dockerImage.push('latest');
+					}
+				}
+			}
+		}
 	}
 	post{
 		always {
