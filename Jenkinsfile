@@ -8,6 +8,9 @@ pipeline {
 		stage('Test') {
 			echo "Test stage"
 		}
+		stage('Int Test') {
+			echo "Int Test stage"
+		}
 	} post {
 		always {
 			echo "I run always."
